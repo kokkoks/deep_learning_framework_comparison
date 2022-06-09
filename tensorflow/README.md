@@ -123,3 +123,28 @@ def custom_loss(y_true, y_pred):
   return {your_loss}
 ```
 
+
+## Training the model
+Tensorflow can easily compile and train model by using built-in function.
+```python
+model.compile(...)
+model.fit(...)
+```
+### Custom training loop
+GradientTape is required for custom training loop.
+```python
+@tf.function
+def train_step(x, y):
+    with tf.GradientTape() as tape:
+        logits = model(x, training=True)
+        loss_value = loss_fn(y, logits)
+    grads = tape.gradient(loss_value, model.trainable_weights)
+    optimizer.apply_gradients(zip(grads, model.trainable_weights))
+    acc_value = tf.math.equal(
+        y, tf.math.round(tf.keras.activations.sigmoid(logits))
+    )
+    train_acc.update_state(acc_value)
+    train_loss.update_state(loss_value)
+```
+You can use the ```@tf.function``` decorator to automatically generate the graph-style code. This will help you create performant and portable models  
+Gradient tape to calculate the gradients and then update the model trainable weights using the optimizer.
