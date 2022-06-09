@@ -147,4 +147,4 @@ def train_step(x, y):
     train_loss.update_state(loss_value)
 ```
 You can use the ```@tf.function``` decorator to automatically generate the graph-style code. This will help you create performant and portable models  
-Gradient tape to calculate the gradients and then update the model trainable weights using the optimizer.
+Using radient tape to calculate the gradients and then update the model trainable weights using the optimizer.
